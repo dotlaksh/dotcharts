@@ -177,7 +177,7 @@
     <div class="flex-grow flex flex-col">
       {#if $loading}
         <div class="flex justify-center items-center flex-grow">
-          <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-slate-900"></div>
+          <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-slate-500"></div>
         </div>
       {:else if $error}
         <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mx-4" role="alert">
