@@ -157,8 +157,8 @@
   id="app"
   class="flex flex-col overflow-hidden"
   class:bg-zinc-50={$theme === 'light'}
-  class:text-zinc-900={$theme === 'light'}
-  class:bg-zinc-950={$theme === 'dark'}
+  class:text-zinc-800={$theme === 'light'}
+  class:bg-zinc-800={$theme === 'dark'}
   class:text-zinc-50={$theme === 'dark'}
   style="height: {vh ? `${vh * 100}px` : '100vh'};"
 >
@@ -186,7 +186,7 @@
   <footer class="h-12 flex-shrink-0 shadow-md"
     class:bg-zinc-50={$theme === 'light'}
     class:border-zinc-600={$theme === 'light'}
-    class:bg-zinc-950={$theme === 'dark'}
+    class:bg-zinc-800={$theme === 'dark'}
     class:border-zinc-400={$theme === 'dark'}
   >
     <div class="max-w-3xl mx-auto px-2 h-full flex items-center justify-between space-x-4">
