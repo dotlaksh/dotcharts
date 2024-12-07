@@ -15,8 +15,8 @@
   import { Star, ArrowLeft, ArrowRight, Expand, Shrink, List, Info } from 'lucide-svelte';
 
   let currentIndex = 0;
-  let selectedFile = 'largecap.json';
-  let selectedInterval: Interval = { label: '6M', value: '1d', range: '6mo' };
+  let selectedFile = 'FnO.json';
+  let selectedInterval: Interval = { label: '3M', value: '1d', range: '3mo' };
   let isFullscreen = false;
   let showFavoritesModal = false;
   let showTradingViewModal = false;
