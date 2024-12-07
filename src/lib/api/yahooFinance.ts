@@ -4,9 +4,58 @@ import type { StockData } from '../types';
 // Cache to store API responses
 const cache = new Map();
 
-export async function fetchYahooFinanceData(symbol: string, range: string): Promise<StockData[]> {
+const aggregateCandles = (dailyData: StockData[], interval: string): StockData[] => {
+  if (interval === '1d') return dailyData;
+
+  const aggregatedData: StockData[] = [];
+  let currentCandle: StockData | null = null;
+
+  for (const candle of dailyData) {
+    const date = new Date(candle.time);
+    let intervalStart: string;
+
+    if (interval === '1wk') {
+      // Set to Monday of the week
+      const day = date.getUTCDay();
+      const diff = date.getUTCDate() - day + (day === 0 ? -6 : 1);
+      intervalStart = new Date(date.setUTCDate(diff)).toISOString().split('T')[0];
+    } else if (interval === '1mo') {
+      // Set to first day of the month
+      intervalStart = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1)).toISOString().split('T')[0];
+    } else {
+      throw new Error(`Unsupported interval: ${interval}`);
+    }
+
+    if (!currentCandle || currentCandle.time !== intervalStart) {
+      if (currentCandle) {
+        aggregatedData.push(currentCandle);
+      }
+      currentCandle = {
+        time: intervalStart,
+        open: candle.open,
+        high: candle.high,
+        low: candle.low,
+        close: candle.close,
+        volume: candle.volume,
+      };
+    } else {
+      currentCandle.high = Math.max(currentCandle.high, candle.high);
+      currentCandle.low = Math.min(currentCandle.low, candle.low);
+      currentCandle.close = candle.close;
+      currentCandle.volume += candle.volume;
+    }
+  }
+
+  if (currentCandle) {
+    aggregatedData.push(currentCandle);
+  }
+
+  return aggregatedData;
+};
+
+export async function fetchYahooFinanceData(symbol: string, interval: string, range: string): Promise<StockData[]> {
   const formattedSymbol = encodeURIComponent(`${symbol}.NS`);
-  const cacheKey = `${formattedSymbol}-${range}`;
+  const cacheKey = `${formattedSymbol}-${range}-${interval}`;
 
   if (cache.has(cacheKey)) {
     return cache.get(cacheKey);
@@ -47,10 +96,12 @@ export async function fetchYahooFinanceData(symbol: string, range: string): Prom
       candle.volume != null
     );
 
-    cache.set(cacheKey, dailyData);
+    const finalData = aggregateCandles(dailyData, interval);
+
+    cache.set(cacheKey, finalData);
     if (cache.size > 100) cache.delete(cache.keys().next().value);
 
-    return dailyData;
+    return finalData;
   } catch (error: any) {
     console.error('API Error:', error.response?.data || error.message);
 
