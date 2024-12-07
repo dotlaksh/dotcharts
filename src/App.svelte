@@ -194,7 +194,7 @@
         <ThemeToggle />
 
         <button
-          class="p-2 hover:text-zinc-900 focus:outline-none lg:hidden"
+          class="p-2 hover:text-blue-400 focus:outline-none lg:hidden"
           class:text-zinc-800={$theme === 'light'}
           class:text-zinc-200={$theme === 'dark'}
           on:click={toggleFullscreen}
@@ -206,7 +206,7 @@
           {/if}
         </button>
         <button
-          class="p-2 hover:text-zinc-800 focus:outline-none"
+          class="p-2 hover:text-blue-400 focus:outline-none"
           class:text-zinc-900={$theme === 'light'}
           class:text-zinc-100={$theme === 'dark'}
           on:click={toggleFavoritesModal}
