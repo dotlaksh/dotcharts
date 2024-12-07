@@ -165,10 +165,10 @@
 <main
   id="app"
   class="flex flex-col overflow-hidden"
-  class:bg-zinc-50={$theme === 'light'}
-  class:text-zinc-900={$theme === 'light'}
-  class:bg-zinc-900={$theme === 'dark'}
-  class:text-zinc-50={$theme === 'dark'}
+  class:bg-slate-50={$theme === 'light'}
+  class:text-slate-900={$theme === 'light'}
+  class:bg-slate-900={$theme === 'dark'}
+  class:text-slate-50={$theme === 'dark'}
   style="height: {vh ? `${vh * 100}px` : '100vh'};"
 >
   <!-- Content Area -->
@@ -177,7 +177,7 @@
     <div class="flex-grow flex flex-col">
       {#if $loading}
         <div class="flex justify-center items-center flex-grow">
-          <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-zinc-900"></div>
+          <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-slate-900"></div>
         </div>
       {:else if $error}
         <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mx-4" role="alert">
@@ -193,19 +193,19 @@
 
   <!-- Sticky Footer -->
   <footer class="h-12 flex-shrink-0 shadow-md"
-    class:bg-zinc-50={$theme === 'light'}
-    class:border-zinc-600={$theme === 'light'}
-    class:bg-zinc-800={$theme === 'dark'}
-    class:border-zinc-400={$theme === 'dark'}
+    class:bg-slate-50={$theme === 'light'}
+    class:border-slate-600={$theme === 'light'}
+    class:bg-slate-800={$theme === 'dark'}
+    class:border-slate-400={$theme === 'dark'}
   >
     <div class="max-w-4xl mx-auto px-2 h-full flex items-center justify-between space-x-4">
       <div class="flex items-center space-x-2 sm:space-x-4">
         <ThemeToggle />
 
         <button
-          class="p-2 hover:text-zinc-900 focus:outline-none lg:hidden"
-          class:text-zinc-800={$theme === 'light'}
-          class:text-zinc-200={$theme === 'dark'}
+          class="p-2 hover:text-slate-900 focus:outline-none lg:hidden"
+          class:text-slate-800={$theme === 'light'}
+          class:text-slate-200={$theme === 'dark'}
           on:click={toggleFullscreen}
         >
           {#if isFullscreen}
@@ -216,9 +216,9 @@
         </button>
         <IntervalSelector class="text-sm sm:text-base px-2" on:change={handleIntervalChange} />
         <button
-          class="p-2 hover:text-zinc-800 focus:outline-none"
-          class:text-zinc-900={$theme === 'light'}
-          class:text-zinc-100={$theme === 'dark'}
+          class="p-2 hover:text-slate-800 focus:outline-none"
+          class:text-slate-900={$theme === 'light'}
+          class:text-slate-100={$theme === 'dark'}
           on:click={toggleFavoritesModal}
         >
           <List class="w-5 h-5" />
@@ -226,8 +226,8 @@
         <button
           on:click={() => $currentStock && handleToggleFavorite($currentStock)}
           class="p-2 hover:text-orange-600 focus:outline-none"
-          class:text-zinc-800={$theme === 'light'}
-          class:text-zinc-200={$theme === 'dark'}
+          class:text-slate-800={$theme === 'light'}
+          class:text-slate-200={$theme === 'dark'}
         >
           <span
             class="w-5 h-5"
@@ -240,8 +240,8 @@
       <div class="flex items-center mr-8 space-x-2 sm:space-x-4">
         <button
           class="py-2 px-4"
-          class:text-zinc-900={$theme === 'light'}
-          class:text-zinc-100={$theme === 'dark'}
+          class:text-slate-900={$theme === 'light'}
+          class:text-slate-100={$theme === 'dark'}
           on:click={handlePrevious}
           disabled={currentIndex === 0}
         >
@@ -250,8 +250,8 @@
         </button>
         <button
           class="py-2 px-4"
-          class:text-zinc-900={$theme === 'light'}
-          class:text-zinc-100={$theme === 'dark'}
+          class:text-slate-900={$theme === 'light'}
+          class:text-slate-100={$theme === 'dark'}
           on:click={handleNext}
           disabled={currentIndex === totalStocks - 1}
         >
