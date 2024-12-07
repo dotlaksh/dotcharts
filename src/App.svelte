@@ -9,7 +9,7 @@
   import { fetchYahooFinanceData } from './lib/api/yahooFinance';
   import { stocks, currentStock, stockData, loading, error, favorites, toggleFavorite } from './lib/stores/stockStore';
   import type { Stock, Interval } from './lib/types';
-  import { Star, ArrowLeft, ArrowRight, Expand, Shrink, List, Info } from 'lucide-svelte';
+  import { Star, MoveLeft, MoveRight, Expand, Shrink, List, Info } from 'lucide-svelte';
 
   let currentIndex = 0;
   let selectedFile = 'FnO.json';
@@ -236,7 +236,7 @@
           disabled={currentIndex === 0}
         >
           <span class="lg:block hidden">Previous</span>
-          <ArrowLeft class="w-5 h-5 lg:hidden" />
+          <MoveLeft class="w-5 h-5 lg:hidden" />
         </button>
         <button
           class="py-2 px-4"
@@ -246,7 +246,7 @@
           disabled={currentIndex === totalStocks - 1}
         >
           <span class="lg:block hidden">Next</span>
-          <ArrowRight class="w-5 h-5 lg:hidden" />
+          <MoveRight class="w-5 h-5 lg:hidden" />
         </button>
       </div>
     </div>
