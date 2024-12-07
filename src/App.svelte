@@ -4,7 +4,6 @@
   import StockChart from './lib/components/StockChart.svelte';
   import FavoritesModal from './lib/components/FavoritesModal.svelte';
   import ThemeToggle from './lib/components/ThemeToggle.svelte';
-  import TradingViewModal from './lib/components/TradingViewModal.svelte';
 
   import { theme } from './lib/stores/themeStore';
 
@@ -237,14 +236,6 @@
             <Star />
           </span>
         </button>
-        <button
-          on:click={toggleTradingViewModal}
-          class="p-2 hover:text-zinc-800 focus:outline-none"
-          class:text-zinc-900={$theme === 'light'}
-          class:text-zinc-100={$theme === 'dark'}
-        >
-          <Info class="w-5 h-5" />
-        </button>
       </div>
       <div class="flex items-center mr-8 space-x-2 sm:space-x-4">
         <button
@@ -272,9 +263,6 @@
   </footer>
   {#if showFavoritesModal}
     <FavoritesModal on:close={toggleFavoritesModal} />
-  {/if}
-  {#if showTradingViewModal && $currentStock}
-    <TradingViewModal symbol={$currentStock.Symbol} onClose={toggleTradingViewModal} />
   {/if}
 </main>
 
