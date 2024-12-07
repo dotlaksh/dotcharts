@@ -179,6 +179,7 @@
           <StockChart data={$stockData} stockName={$currentStock["Symbol"]} />
         </div>
       {/if}
+    <ThemeToggle />
     </div>
   </div>
 
@@ -191,7 +192,7 @@
   >
     <div class="max-w-3xl mx-auto px-2 h-full flex items-center justify-between space-x-4">
       <div class="flex items-center space-x-2 sm:space-x-4">
-        <ThemeToggle />
+        
 
         <button
           class="p-2 hover:text-blue-400 focus:outline-none lg:hidden"
