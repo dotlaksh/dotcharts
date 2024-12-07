@@ -179,7 +179,6 @@
           <StockChart data={$stockData} stockName={$currentStock["Symbol"]} />
         </div>
       {/if}
-    <ThemeToggle />
     </div>
   </div>
 
@@ -189,11 +188,10 @@
     class:border-zinc-600={$theme === 'light'}
     class:bg-zinc-800={$theme === 'dark'}
     class:border-zinc-400={$theme === 'dark'}
-  >
+  >    <ThemeToggle />
+
     <div class="max-w-3xl mx-auto px-2 h-full flex items-center justify-between space-x-4">
       <div class="flex items-center space-x-2 sm:space-x-4">
-        
-
         <button
           class="p-2 hover:text-blue-400 focus:outline-none lg:hidden"
           class:text-zinc-800={$theme === 'light'}
