@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import IntervalSelector from './lib/components/IntervalSelector.svelte';
   import StockChart from './lib/components/StockChart.svelte';
   import FavoritesModal from './lib/components/FavoritesModal.svelte';
   import ThemeToggle from './lib/components/ThemeToggle.svelte';
@@ -67,14 +66,6 @@
     showTradingViewModal = !showTradingViewModal;
   }
 
-
-
-  async function handleIntervalChange(event: CustomEvent<Interval>) {
-    selectedInterval = event.detail;
-    if ($currentStock) {
-      await loadStockData($currentStock, selectedInterval);
-    }
-  }
 
   async function loadStocksFromFile(file: string) {
     $loading = true;
@@ -214,7 +205,6 @@
             <Expand class="w-5 h-5" />
           {/if}
         </button>
-        <IntervalSelector class="text-sm sm:text-base px-2" on:change={handleIntervalChange} />
         <button
           class="p-2 hover:text-slate-800 focus:outline-none"
           class:text-slate-900={$theme === 'light'}
