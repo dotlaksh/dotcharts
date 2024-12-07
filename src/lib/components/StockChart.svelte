@@ -76,8 +76,9 @@
         horzLines: { color: $theme === 'light' ? '#e1e3ea' : '#363c4e' },
       },
       timeScale: {
-        timeVisible: true,
-        secondsVisible: false,
+        timeVisible: false,
+        rightOffset: 15,
+        minBarSpacing: 2,
         borderColor: $theme === 'light' ? '#e1e3ea' : '#363c4e',
       },
     });
@@ -230,10 +231,10 @@
       },
       grid: {
         vertLines: { 
-          color: $theme === 'light' ? '#e1e3ea' : '#363c4e' 
+          visible:false 
         },
         horzLines: { 
-          color: $theme === 'light' ? '#e1e3ea' : '#363c4e' 
+          visible:false
         },
       },
     });
