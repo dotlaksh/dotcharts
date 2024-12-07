@@ -102,7 +102,6 @@
         top: 0.8,
         bottom: 0,
       },
-      lineWidth: 1,
     });
 
     chart.priceScale('volume').applyOptions({
@@ -113,7 +112,6 @@
     });
 
     barSeries.priceScale().applyOptions({
-      mode: 1,
       scaleMargins: {
         top: 0.2,
         bottom: 0.2,
