@@ -45,15 +45,19 @@
       const isPositive = priceChange >= 0;
 
       legendContainer.innerHTML = `
-        <h2 class="text-md font-bold mb-2">${stockName}</h2>
-        <div class="flex items-center space-x-4 mb-2">
-          <div class="flex flex-col">
-            <span class="text-sm font-semibold">${formatPrice(barData.close)}</span>
-          </div>
-          <div class="flex flex-col">
-            <span class="text-sm font-semibold ${isPositive ? 'text-green-500' : 'text-red-500'}">
-              ${isPositive ? '+' : ''}${formatPrice(priceChange)} (${formatPercentage(percentageChange)})
-            </span>
+        <div class="flex items-center justify-between w-full">
+          <h2 class="text-lg font-bold">${stockName}</h2>
+          <div class="flex items-center space-x-4">
+            <div class="text-right">
+              <span class="text-xl font-semibold">${formatPrice(barData.close)}</span>
+              <span class="block text-sm ${isPositive ? 'text-green-500' : 'text-red-500'}">
+                ${isPositive ? '+' : ''}${formatPrice(priceChange)} (${formatPercentage(percentageChange)})
+              </span>
+            </div>
+            <div class="text-right">
+              <span class="block text-sm font-medium">Volume</span>
+              <span class="text-sm">${formatVolume(volumeData ? volumeData.value : 0)}</span>
+            </div>
           </div>
         </div>
       `;
@@ -85,28 +89,8 @@
 
     barSeries = chart.addBarSeries({
       upColor: '#22c55e',
-      downColor: '#ea580c',
-      thinBars: false
-    });
-
-    volumeSeries = chart.addHistogramSeries({
-      color: $theme === 'light' ? 'rgba(12, 10, 9, 0.5)' : 'rgba(244, 244, 245, 0.5)',
-      priceFormat: {
-        type: 'volume',
-      },
-      priceScaleId: 'volume',
-      scaleMargins: {
-        top: 0.8,
-        bottom: 0,
-      },
-      lineWidth: 1,
-    });
-
-    chart.priceScale('volume').applyOptions({
-      scaleMargins: {
-        top: 0.8,
-        bottom: 0,
-      },
+      downColor: '#ef4444',
+      thinBars: false,
     });
 
     barSeries.priceScale().applyOptions({
@@ -116,6 +100,26 @@
         bottom: 0.2,
       },
       borderColor: $theme === 'light' ? '#e5e7eb' : '#3f3f46',
+    });
+
+
+    volumeSeries = chart.addHistogramSeries({
+      color: $theme === 'light' ? 'rgba(76, 175, 80, 0.5)' : 'rgba(76, 175, 80, 0.5)',
+      priceFormat: {
+        type: 'volume',
+      },
+      priceScaleId: 'volume',
+      scaleMargins: {
+        top: 0.8,
+        bottom: 0,
+      },
+    });
+
+    chart.priceScale('volume').applyOptions({
+      scaleMargins: {
+        top: 0.8,
+        bottom: 0,
+      },
     });
 
     updateChartData();
@@ -130,31 +134,18 @@
 
   function updateChartData() {
     if (barSeries && volumeSeries && data && data.length > 0) {
-      const barData = data.map(({ time, high, low, close }, index) => {
-        const previousClose = index > 0 ? data[index - 1].close : close;
-        const isUp = close >= previousClose;
-        return {
-          time,
-          open: close,
-          high,
-          low,
-          close,
-          color: isUp ? ($theme === 'light' ? '#18181b' : '#16a34a') : '#dc2626',
-        };
-      });
+      const barData = data.map(({ time, open, high, low, close }, index) => ({
+        time,
+        open,
+        high,
+        low,
+        close
+      }));
 
-      const volumeData = data.map(({ time, close, volume }, index) => {
-        const previousClose = index > 0 ? data[index - 1].close : close;
-        const isUp = close >= previousClose;
-        return {
-          time,
-          value: volume,
-          color: isUp 
-            ? ($theme === 'light' ? 'rgba(12, 10, 9, 0.5)' : 'rgba(22, 163, 74, 0.5)') 
-            : 'rgba(220, 38, 38, 0.5)',
-          lineWidth: 1,
-        };
-      });
+      const volumeData = data.map(({ time, volume }) => ({
+        time,
+        value: volume,
+      }));
 
       barSeries.setData(barData);
       volumeSeries.setData(volumeData);
@@ -170,6 +161,7 @@
       updateLegend({
         seriesData: new Map([
           [barSeries, lastDataPoint],
+          [volumeSeries, lastDataPoint],
         ]),
       });
     }
@@ -177,13 +169,24 @@
 
   onMount(() => {
     initializeChart();
+    window.addEventListener('resize', handleResize);
   });
 
   onDestroy(() => {
     if (chart) {
       chart.remove();
     }
+    window.removeEventListener('resize', handleResize);
   });
+
+  function handleResize() {
+    if (chart && chartContainer) {
+      chart.applyOptions({ 
+        width: chartContainer.clientWidth,
+        height: chartContainer.clientHeight 
+      });
+    }
+  }
 
   $: if (chart && $theme) {
     chart.applyOptions({
@@ -214,13 +217,17 @@
   }
 </script>
 
-<div class="flex flex-col w-full h-full min-h-[300px] max-h-[calc(100vh-6rem)]">
+<div class="flex flex-col w-full h-full">
   <div 
     bind:this={legendContainer} 
-    class="p-4 font-sans h-16"
+    class="p-4 font-sans transition-colors duration-200 ease-in-out"
+    class:bg-white={$theme === 'light'}
+    class:bg-zinc-900={$theme === 'dark'}
     class:text-zinc-900={$theme === 'light'}
     class:text-zinc-50={$theme === 'dark'}
   ></div>
-  <div bind:this={chartContainer} class="flex-grow w-full"></div>
+  <div class="flex-grow relative">
+    <div bind:this={chartContainer} class="absolute inset-0"></div>
+  </div>
 </div>
 
