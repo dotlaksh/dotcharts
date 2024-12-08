@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { createChart, ColorType } from 'lightweight-charts';
   import type { StockData } from '../types';
   import { theme } from '../stores/themeStore';
