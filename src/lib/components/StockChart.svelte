@@ -12,7 +12,6 @@
   let chart: any;
   let barSeries: any;
   let volumeSeries: any;
-  let resizeObserver: ResizeObserver;
 
   function formatPrice(price: number): string {
     return price.toFixed(2);
@@ -65,8 +64,6 @@
     if (!chartContainer) return;
 
     chart = createChart(chartContainer, {
-      width: chartContainer.clientWidth,
-      height: chartContainer.clientHeight,
       layout: {
         background: { 
           type: ColorType.Solid, 
@@ -178,57 +175,14 @@
     }
   }
 
-  function adjustChartSize() {
-    if (chart && chartContainer) {
-      requestAnimationFrame(() => {
-        const newWidth = chartContainer.clientWidth;
-        const newHeight = chartContainer.clientHeight;
-        chart.applyOptions({
-          width: newWidth,
-          height: newHeight,
-        });
-        chart.timeScale().fitContent();
-      });
-    }
-  }
-
-  function handleResize() {
-    requestAnimationFrame(() => {
-      if (chartContainer) {
-        adjustChartSize();
-      }
-    });
-  }
-
   onMount(() => {
     initializeChart();
-    
-    resizeObserver = new ResizeObserver(() => {
-      requestAnimationFrame(adjustChartSize);
-    });
-    
-    if (chartContainer) {
-      resizeObserver.observe(chartContainer);
+  });
+
+  onDestroy(() => {
+    if (chart) {
+      chart.remove();
     }
-
-    window.addEventListener('orientationchange', () => {
-      setTimeout(adjustChartSize, 100);
-    });
-
-    document.addEventListener('fullscreenchange', adjustChartSize);
-
-    return () => {
-      if (resizeObserver) {
-        resizeObserver.disconnect();
-      }
-      window.removeEventListener('orientationchange', () => {
-        setTimeout(adjustChartSize, 100);
-      });
-      document.removeEventListener('fullscreenchange', adjustChartSize);
-      if (chart) {
-        chart.remove();
-      }
-    };
   });
 
   $: if (chart && $theme) {
@@ -260,12 +214,13 @@
   }
 </script>
 
-<div class="chart-container relative w-full h-full min-h-[300px]">
-  <div bind:this={chartContainer} class="w-full h-full"></div>
+<div class="flex flex-col w-full h-full min-h-[300px] max-h-[calc(100vh-6rem)]">
   <div 
     bind:this={legendContainer} 
-    class="absolute top-1 left-1 z-10 font-sans p-1"
+    class="p-4 font-sans h-16"
     class:text-zinc-900={$theme === 'light'}
     class:text-zinc-50={$theme === 'dark'}
   ></div>
+  <div bind:this={chartContainer} class="flex-grow w-full"></div>
 </div>
+
