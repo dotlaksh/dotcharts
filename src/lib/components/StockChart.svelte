@@ -2,7 +2,6 @@
   import { onMount, onDestroy } from 'svelte';
   import { createChart, ColorType } from 'lightweight-charts';
   import type { StockData } from '../types';
-  import { theme } from '../stores/themeStore';
 
   export let data: StockData[] = [];
   export let stockName: string = '';
@@ -70,9 +69,9 @@
       layout: {
         background: { 
           type: ColorType.Solid, 
-          color: $theme === 'light' ? '#ffffff' : '#18181b' 
+          color: '#18181b' 
         },
-        textColor: $theme === 'light' ? '#18181b' : '#f4f4f5',
+        textColor: '#f4f4f5',
       },
       grid: {
         vertLines: { visible: false  },
@@ -82,7 +81,7 @@
         timeVisible: false,
         rightOffset: 15,
         minBarSpacing: 1,
-        borderColor: $theme === 'light' ? '#e5e7eb' : '#3f3f46',
+        borderColor: '#3f3f46',
       },
     });
 
@@ -93,7 +92,7 @@
     });
 
     volumeSeries = chart.addHistogramSeries({
-      color: $theme === 'light' ? 'rgba(12, 10, 9, 0.5)' : 'rgba(244, 244, 245, 0.5)',
+      color: 'rgba(244, 244, 245, 0.5)',
       priceFormat: {
         type: 'volume',
       },
@@ -118,7 +117,7 @@
         top: 0.2,
         bottom: 0.2,
       },
-      borderColor: $theme === 'light' ? '#e5e7eb' : '#3f3f46',
+      borderColor: '#3f3f46',
     });
 
     updateChartData();
@@ -142,7 +141,7 @@
           high,
           low,
           close,
-          color: isUp ? ($theme === 'light' ? '#18181b' : '#16a34a') : '#dc2626',
+          color: isUp ? '#16a34a' : '#dc2626',
         };
       });
 
@@ -152,9 +151,7 @@
         return {
           time,
           value: volume,
-          color: isUp 
-            ? ($theme === 'light' ? 'rgba(12, 10, 9, 0.5)' : 'rgba(22, 163, 74, 0.5)') 
-            : 'rgba(220, 38, 38, 0.5)',
+          color: isUp ? 'rgba(22, 163, 74, 0.5)' : 'rgba(220, 38, 38, 0.5)',
           lineWidth: 1,
         };
       });
@@ -231,30 +228,6 @@
     };
   });
 
-  $: if (chart && $theme) {
-    chart.applyOptions({
-      layout: {
-        background: { 
-          type: ColorType.Solid, 
-          color: $theme === 'light' ? '#ffffff' : '#18181b' 
-        },
-        textColor: $theme === 'light' ? '#18181b' : '#f4f4f5',
-      },
-      grid: {
-        vertLines: { 
-          color: $theme === 'light' ? '#e5e7eb' : '#3f3f46' 
-        },
-        horzLines: { 
-          color: $theme === 'light' ? '#e5e7eb' : '#3f3f46' 
-        },
-      },
-    });
-    barSeries.priceScale().applyOptions({
-      borderColor: $theme === 'light' ? '#e5e7eb' : '#3f3f46',
-    });
-    updateChartData();
-  }
-
   $: if (chart && data) {
     updateChartData();
   }
@@ -264,8 +237,6 @@
   <div bind:this={chartContainer} class="w-full h-full"></div>
   <div 
     bind:this={legendContainer} 
-    class="absolute top-1 left-1 z-10 font-sans p-1"
-    class:text-zinc-900={$theme === 'light'}
-    class:text-zinc-50={$theme === 'dark'}
+    class="absolute top-1 left-1 z-10 font-sans p-1 text-zinc-50"
   ></div>
 </div>
