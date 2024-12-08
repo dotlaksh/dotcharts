@@ -10,7 +10,7 @@
 
   let currentIndex = 0;
   let selectedFile = 'FnO.json';
-  let selectedInterval: Interval = { label: '3M', value: '1d', range: '3mo' };
+  let selectedInterval: Interval = { value: '1d', range: '6mo' };
   let isFullscreen = false;
   let showFavoritesModal = false;
   let showTradingViewModal = false;
