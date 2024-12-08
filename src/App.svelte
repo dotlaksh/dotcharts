@@ -148,7 +148,7 @@
 
 <main
   id="app"
-  class="flex flex-col overflow-hidden bg-zinc-800 text-zinc-50"
+  class="flex flex-col overflow-hidden bg-zinc-900 text-zinc-50"
   style="height: {vh ? `${vh * 100}px` : '100vh'};"
 >
   <!-- Content Area -->
@@ -172,7 +172,7 @@
   </div>
 
   <!-- Sticky Footer -->
-  <footer class="h-12 flex-shrink-0 shadow-md bg-zinc-800 border-zinc-400">    
+  <footer class="h-12 flex-shrink-0 shadow-md bg-zinc-900 border-t border-zinc-600">    
     <div class="max-w-3xl mx-auto px-2 h-full flex items-center justify-between space-x-4">
       <div class="flex items-center space-x-2 sm:space-x-4">
         <button
