@@ -13,7 +13,6 @@ export interface StockData {
 }
 
 export interface Interval {
-  label: string;
   value: string;
   range: string;
 }
