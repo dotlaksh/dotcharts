@@ -147,7 +147,7 @@
 
 <main
   id="app"
-  class="flex flex-col overflow-hidden bg-gray-900 text-gray-100 fixed inset-0"
+  class="flex flex-col overflow-hidden bg-gray-800 text-gray-100 fixed inset-0"
 >
   <!-- Header -->
   <header class="bg-gray-800 p-2 shadow-md">
