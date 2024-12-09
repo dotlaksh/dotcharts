@@ -150,9 +150,9 @@
   class="flex flex-col overflow-hidden bg-gray-900 text-gray-100 fixed inset-0"
 >
   <!-- Header -->
-  <header class="bg-gray-800 p-4 shadow-md">
+  <header class="bg-gray-800 p-2 shadow-md">
     <div class="flex justify-between items-center">
-      <h1 class="text-xl font-bold">Stock Tracker</h1>
+      <h2 class="text-xl font-bold">dotcharts</h2>
       <div class="flex space-x-2">
         <button
           class="p-2 hover:bg-gray-700 rounded-full focus:outline-none"
@@ -194,7 +194,7 @@
   </div>
 
   <!-- Footer -->
-  <footer class="bg-gray-800 p-4 shadow-md">
+  <footer class="bg-gray-800 p-2 shadow-md">
     <div class="flex justify-between items-center">
       <button
         on:click={() => $currentStock && handleToggleFavorite($currentStock)}
@@ -228,11 +228,4 @@
     <FavoritesModal on:close={toggleFavoritesModal} />
   {/if}
 </main>
-
-<style>
-  :global(body) {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
-  }
-</style>
 
