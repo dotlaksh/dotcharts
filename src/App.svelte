@@ -162,7 +162,16 @@
           <Star />
         </span>
       </button>
-        
+        <button
+          class="p-2 hover:bg-gray-700 rounded-full focus:outline-none"
+          on:click={toggleFullscreen}
+        >
+          {#if isFullscreen}
+            <Shrink class="w-5 h-5" />
+          {:else}
+            <Expand class="w-5 h-5" />
+          {/if}
+        </button>
       </div>
     </div>
   </header>
@@ -191,16 +200,7 @@
     <div class="flex justify-between items-center">
       
       <div class="flex items-center space-x-4">
-      <button
-          class="p-2 hover:bg-gray-700 rounded-full focus:outline-none"
-          on:click={toggleFullscreen}
-        >
-          {#if isFullscreen}
-            <Shrink class="w-5 h-5" />
-          {:else}
-            <Expand class="w-5 h-5" />
-          {/if}
-        </button>
+      
         <button
           class="p-2 hover:bg-gray-700 rounded-full focus:outline-none"
           on:click={toggleFavoritesModal}
