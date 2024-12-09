@@ -112,10 +112,9 @@
     });
 
     barSeries.priceScale().applyOptions({
-      mode: 1,
       scaleMargins: {
         top: 0.2,
-        bottom: 0.2,
+        bottom: 0.1,
       },
       borderColor: '#3f3f46',
     });
