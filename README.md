@@ -1,1 +1,1 @@
- "KwikChart: Check Charts Instantly." 
+"dotCharts: Check Charts Instantly." 
