@@ -151,7 +151,7 @@
         return {
           time,
           value: volume,
-          color: isUp ? 'rgba(22, 163, 74, 0.5)' : 'rgba(249 115 22, 0.5)',
+          color: isUp ? 'rgba(22, 163, 74, 0.5)' : 'rgba(249, 115, 22, 0.5)',
           lineWidth: 1,
         };
       });
