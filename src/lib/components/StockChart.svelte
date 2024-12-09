@@ -88,7 +88,7 @@
     barSeries = chart.addBarSeries({
       upColor: '#22c55e',
       downColor: '#f97316',
-      thinBars: false
+      thinBars: true
     });
 
     volumeSeries = chart.addHistogramSeries({
