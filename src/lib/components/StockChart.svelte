@@ -9,12 +9,9 @@
   let chartContainer: HTMLElement;
   let legendContainer: HTMLElement;
   let chart: any;
-  let candleSeries: any;
+  let barSeries: any;
   let volumeSeries: any;
   let resizeObserver: ResizeObserver;
-
-  const upColor = '#10b981';
-  const downColor = '#ef4444';
 
   function formatPrice(price: number): string {
     return price.toFixed(2);
@@ -24,8 +21,7 @@
     return percentage.toFixed(2) + '%';
   }
 
-  function formatVolume(volume: number | undefined | null): string {
-    if (volume === undefined || volume === null) return 'N/A';
+  function formatVolume(volume: number): string {
     if (volume >= 1000000) {
       return (volume / 1000000).toFixed(2) + 'M';
     } else if (volume >= 1000) {
@@ -35,31 +31,32 @@
   }
 
   function updateLegend(param: any) {
-    const candleData = param.seriesData.get(candleSeries);
+    const barData = param.seriesData.get(barSeries);
     const volumeData = param.seriesData.get(volumeSeries);
-    if (candleData) {
-      const dataPoint = data.find((d) => d.time === candleData.time);
+    if (barData) {
+      const dataPoint = data.find((d) => d.time === barData.time);
       if (!dataPoint) return;
 
       const previousDataPoint = data[data.indexOf(dataPoint) - 1];
       const previousClose = previousDataPoint ? previousDataPoint.close : dataPoint.open;
 
-      const priceChange = candleData.close - previousClose;
+      const priceChange = barData.close - previousClose;
       const percentageChange = (priceChange / previousClose) * 100;
       const isPositive = priceChange >= 0;
 
       legendContainer.innerHTML = `
-  <div class="p-2 text-white text-sm">
-    <div class="font-bold">${stockName}</div>
-    <div class="flex items-center space-x-2">
-      <span>${formatPrice(candleData.close)}</span>
-      <span class="${isPositive ? 'text-green-500' : 'text-red-500'}">
-        ${isPositive ? '+' : ''}${formatPrice(priceChange)} (${formatPercentage(percentageChange)})
-      </span>
-    </div>
-    <div>O: ${formatPrice(candleData.open)} H: ${formatPrice(candleData.high)} L: ${formatPrice(candleData.low)}</div>
-  </div>
-`;
+        <h2 class="text-md font-bold mb-2">${stockName}</h2>
+        <div class="flex items-center space-x-4 mb-2">
+          <div class="flex flex-col">
+            <span class="text-sm font-semibold">${formatPrice(barData.close)}</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-sm font-semibold ${isPositive ? 'text-green-500' : 'text-red-500'}">
+              ${isPositive ? '+' : ''}${formatPrice(priceChange)} (${formatPercentage(percentageChange)})
+            </span>
+          </div>
+        </div>
+      `;
     }
   }
 
@@ -70,32 +67,32 @@
       width: chartContainer.clientWidth,
       height: chartContainer.clientHeight,
       layout: {
-        background: { type: ColorType.Solid, color: '#1f2937' },
-        textColor: '#e5e7eb',
+        background: { 
+          type: ColorType.Solid, 
+          color: '#18181b' 
+        },
+        textColor: '#f4f4f5',
       },
       grid: {
-        vertLines: { color: 'rgba(42, 46, 57, 0)' },
-        horzLines: { color: 'rgba(42, 46, 57, 0.6)' },
+        vertLines: { visible: false  },
+        horzLines: { visible: false  },
       },
       timeScale: {
-        timeVisible: true,
-        secondsVisible: false,
+        timeVisible: false,
         rightOffset: 10,
-        minBarSpacing:2,
-        borderColor: '#374151',
+        minBarSpacing: 1,
+        borderColor: '#3f3f46',
       },
     });
 
-    candleSeries = chart.addCandlestickSeries({
-      upColor: upColor,
-      downColor: downColor,
-      borderVisible: false,
-      wickUpColor: upColor,
-      wickDownColor: downColor,
+    barSeries = chart.addBarSeries({
+      upColor: '#22c55e',
+      downColor: '#f97316',
+      thinBars: false
     });
 
     volumeSeries = chart.addHistogramSeries({
-      color: '#26a69a',
+      color: 'rgba(244, 244, 245, 0.5)',
       priceFormat: {
         type: 'volume',
       },
@@ -104,6 +101,7 @@
         top: 0.8,
         bottom: 0,
       },
+      lineWidth: 1,
     });
 
     chart.priceScale('volume').applyOptions({
@@ -113,14 +111,14 @@
       },
     });
 
-    candleSeries.priceScale().applyOptions({
-      mode: 1,
+    barSeries.priceScale().applyOptions({
       scaleMargins: {
         top: 0.2,
-        bottom: 0.2,
+        bottom: 0.1,
       },
       borderColor: '#3f3f46',
     });
+
     updateChartData();
     setInitialLegend();
 
@@ -132,22 +130,32 @@
   }
 
   function updateChartData() {
-    if (candleSeries && volumeSeries && data && data.length > 0) {
-      const candleData = data.map(({ time, open, high, low, close }) => ({
-        time,
-        open,
-        high,
-        low,
-        close,
-      }));
+    if (barSeries && volumeSeries && data && data.length > 0) {
+      const barData = data.map(({ time, high, low, close }, index) => {
+        const previousClose = index > 0 ? data[index - 1].close : close;
+        const isUp = close >= previousClose;
+        return {
+          time,
+          open: close,
+          high,
+          low,
+          close,
+          color: isUp ? '#16a34a' : '#f97316',
+        };
+      });
 
-      const volumeData = data.map(({ time, open, close, volume }) => ({
-        time,
-        value: volume !== undefined ? volume : null,
-        color: close >= open ? upColor : downColor,
-      }));
+      const volumeData = data.map(({ time, close, volume }, index) => {
+        const previousClose = index > 0 ? data[index - 1].close : close;
+        const isUp = close >= previousClose;
+        return {
+          time,
+          value: volume,
+          color: isUp ? 'rgba(22, 163, 74, 0.5)' : 'rgba(249, 115, 22, 0.5)',
+          lineWidth: 1,
+        };
+      });
 
-      candleSeries.setData(candleData);
+      barSeries.setData(barData);
       volumeSeries.setData(volumeData);
 
       chart.timeScale().fitContent();
@@ -160,8 +168,7 @@
       const lastDataPoint = data[data.length - 1];
       updateLegend({
         seriesData: new Map([
-          [candleSeries, lastDataPoint],
-          [volumeSeries, lastDataPoint],
+          [barSeries, lastDataPoint],
         ]),
       });
     }
@@ -169,17 +176,33 @@
 
   function adjustChartSize() {
     if (chart && chartContainer) {
-      const newWidth = chartContainer.clientWidth;
-      const newHeight = chartContainer.clientHeight;
-      chart.applyOptions({ width: newWidth, height: newHeight });
-      chart.timeScale().fitContent();
+      requestAnimationFrame(() => {
+        const newWidth = chartContainer.clientWidth;
+        const newHeight = chartContainer.clientHeight;
+        chart.applyOptions({
+          width: newWidth,
+          height: newHeight,
+        });
+        chart.timeScale().fitContent();
+      });
     }
+  }
+
+  function handleResize() {
+    requestAnimationFrame(() => {
+      if (chartContainer) {
+        adjustChartSize();
+      }
+    });
   }
 
   onMount(() => {
     initializeChart();
     
-    resizeObserver = new ResizeObserver(adjustChartSize);
+    resizeObserver = new ResizeObserver(() => {
+      requestAnimationFrame(adjustChartSize);
+    });
+    
     if (chartContainer) {
       resizeObserver.observe(chartContainer);
     }
@@ -213,7 +236,6 @@
   <div bind:this={chartContainer} class="w-full h-full"></div>
   <div 
     bind:this={legendContainer} 
-    class="absolute top-0 left-0 z-10 font-san bg-opacity-50"
+    class="absolute top-1 left-1 z-10 font-sans p-1 text-zinc-50"
   ></div>
 </div>
-
