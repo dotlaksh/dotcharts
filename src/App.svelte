@@ -18,7 +18,7 @@
   $: totalStocks = $stocks.length;
 
   function updateVHUnit() {
-    vh = window.innerHeight * 0.01;
+    const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
   }
 
@@ -147,13 +147,12 @@
 
 <main
   id="app"
-  class="flex flex-col overflow-hidden bg-gray-900 text-gray-100"
-  style="height: {vh ? `${vh * 100}px` : '100vh'};"
+  class="flex flex-col overflow-hidden bg-gray-900 text-gray-100 fixed inset-0"
 >
   <!-- Header -->
   <header class="bg-gray-800 p-4 shadow-md">
     <div class="flex justify-between items-center">
-      <h1 class="text-xl font-bold">dotCharts</h1>
+      <h1 class="text-xl font-bold">Stock Tracker</h1>
       <div class="flex space-x-2">
         <button
           class="p-2 hover:bg-gray-700 rounded-full focus:outline-none"
@@ -176,13 +175,13 @@
   </header>
 
   <!-- Content Area -->
-  <div class="flex-grow overflow-auto p-4">
+  <div class="flex-grow overflow-hidden">
     {#if $loading}
       <div class="flex justify-center items-center h-full">
         <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gray-300"></div>
       </div>
     {:else if $error}
-      <div class="bg-red-500 text-white p-4 rounded-md" role="alert">
+      <div class="bg-red-500 text-white p-4 rounded-md m-4" role="alert">
         <p>{$error}</p>
       </div>
     {:else if $stockData.length > 0 && $currentStock}
