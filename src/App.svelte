@@ -147,21 +147,13 @@
 
 <main
   id="app"
-  class="flex flex-col overflow-hidden bg-gray-800 text-gray-100 fixed inset-0"
+  class="flex flex-col overflow-hidden bg-gray-900 text-gray-100 fixed inset-0"
 >
   <!-- Header -->
   <header class="bg-gray-800 p-2 shadow-md">
     <div class="flex justify-between items-center">
       <h2 class="text-xl font-bold">dotcharts</h2>
       <div class="flex space-x-2">
-      <button
-        on:click={() => $currentStock && handleToggleFavorite($currentStock)}
-        class="p-2 hover:bg-gray-700 rounded-full focus:outline-none"
-      >
-        <span class="w-5 h-5" class:text-yellow-500={$currentStock && $favorites.has($currentStock.Symbol)}>
-          <Star />
-        </span>
-      </button>
         <button
           class="p-2 hover:bg-gray-700 rounded-full focus:outline-none"
           on:click={toggleFullscreen}
@@ -171,6 +163,12 @@
           {:else}
             <Expand class="w-5 h-5" />
           {/if}
+        </button>
+        <button
+          class="p-2 hover:bg-gray-700 rounded-full focus:outline-none"
+          on:click={toggleFavoritesModal}
+        >
+          <List class="w-5 h-5" />
         </button>
       </div>
     </div>
@@ -198,15 +196,15 @@
   <!-- Footer -->
   <footer class="bg-gray-800 p-2 shadow-md">
     <div class="flex justify-between items-center">
-      
+      <button
+        on:click={() => $currentStock && handleToggleFavorite($currentStock)}
+        class="p-2 hover:bg-gray-700 rounded-full focus:outline-none"
+      >
+        <span class="w-5 h-5" class:text-yellow-500={$currentStock && $favorites.has($currentStock.Symbol)}>
+          <Star />
+        </span>
+      </button>
       <div class="flex items-center space-x-4">
-      
-        <button
-          class="p-2 hover:bg-gray-700 rounded-full focus:outline-none"
-          on:click={toggleFavoritesModal}
-        >
-          <List class="w-5 h-5" />
-        </button>
         <button
           class="p-2 hover:bg-gray-700 rounded-full focus:outline-none"
           on:click={handlePrevious}
@@ -230,4 +228,3 @@
     <FavoritesModal on:close={toggleFavoritesModal} />
   {/if}
 </main>
-
