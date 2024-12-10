@@ -80,7 +80,7 @@
       timeScale: {
         timeVisible: false,
         rightOffset: 10,
-        minBarSpacing: 1,
+        minBarSpacing: 5,
         borderColor: '#3f3f46',
       },
     });
